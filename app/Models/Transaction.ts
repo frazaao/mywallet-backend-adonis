@@ -20,9 +20,13 @@ export default class Transaction extends BaseModel {
   @column({ serializeAs:null })
   public userId: number
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => {
+    return value.toFormat('dd/MM/yy')
+  }})
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serialize: (value: DateTime) => {
+    return value.toFormat('dd/MM/yy')
+  }})
   public updatedAt: DateTime
 }

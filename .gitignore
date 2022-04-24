@@ -6,3 +6,4 @@ coverage
 .env
 tmp
 backup
+package-lock.json

@@ -71,7 +71,7 @@ export default class UsersController {
     }
   }
 
-  public async login({ auth, request }: HttpContextContract){
+  public async login({ auth, request }: HttpContextContract){    
     const { email, password } = request.all()
 
     const user = await auth.attempt(email, password )

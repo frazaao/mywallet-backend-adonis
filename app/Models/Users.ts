@@ -25,7 +25,7 @@ export default class Users extends BaseModel {
   } )
   public transactions: HasMany<typeof Transaction>
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken?: string
 
   @column.dateTime({ autoCreate: true })
