@@ -34,7 +34,7 @@ export default class TransactionsController {
     return transaction
   }
 
-  public async update({ auth, params, request }: HttpContextContract) {
+  public async update({ auth, params, request }: HttpContextContract) {    
     const user = await auth.authenticate()
     const id = params.id
     const { title, description, amount, type } = request.all()
@@ -46,7 +46,11 @@ export default class TransactionsController {
 
     const [transaction] = user.transactions
 
+    console.log(transaction)
+
     transaction.merge(newTransaction)
+
+    transaction.save()
 
     return transaction
   }
