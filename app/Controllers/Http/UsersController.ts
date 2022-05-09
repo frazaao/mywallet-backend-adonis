@@ -78,9 +78,13 @@ export default class UsersController {
   public async registerUserVize({ request, response }: HttpContextContract) {
     const body = request.all()
     const address = request.parsedUrl.path?.slice(1)
-    const res = await axios.post(address, {
-      ...body,
-    })
-    return res
+    if (address) {
+      const res = await axios.post(address, {
+        ...body,
+      })
+      return res
+    } else {
+      return response.status(400).json({ message: 'No address provided' })
+    }
   }
 }
