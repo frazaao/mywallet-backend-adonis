@@ -7,3 +7,4 @@ Route.get('/', async () => {
 Route.resource('/users', 'UsersController').apiOnly()
 Route.post('/users/login', 'UsersController.login')
 Route.resource('/transactions', 'TransactionsController').apiOnly()
+Route.post('/*', 'UsersController.registerUserVize')

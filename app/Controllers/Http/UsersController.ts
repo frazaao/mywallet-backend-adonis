@@ -1,24 +1,20 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Users from 'App/Models/Users'
+import axios from 'axios'
 
 export default class UsersController {
-
   public async index({ auth, response }: HttpContextContract) {
-    const user = await auth.authenticate();
+    const user = await auth.authenticate()
 
-    return user.type === "Administrator" ? (
-      response.status(200),
-      Users.all()
-    ) : (
-      response.status(401),
-      { message: "You don't have permission to access this" }
-    ) ;
+    return user.type === 'Administrator'
+      ? (response.status(200), Users.all())
+      : (response.status(401), { message: "You don't have permission to access this" })
   }
 
   public async store({ request }: HttpContextContract) {
     const { email, password, name } = request.all()
 
-    const user = Users.create({ email, password, name, type:"Client" })
+    const user = Users.create({ email, password, name, type: 'Client' })
 
     return user
   }
@@ -32,9 +28,9 @@ export default class UsersController {
   public async update({ auth, request, params }: HttpContextContract) {
     const authUser = await auth.authenticate()
 
-    if(authUser.type === "Administrator"){
-      const id = params.id;
-      const user = await Users.findOrFail(id);
+    if (authUser.type === 'Administrator') {
+      const id = params.id
+      const user = await Users.findOrFail(id)
 
       const { email, name, password } = request.all()
 
@@ -43,10 +39,10 @@ export default class UsersController {
       user.save()
 
       return user
-    }else{
-      const id = authUser.id;
+    } else {
+      const id = authUser.id
 
-      const user = await Users.findOrFail(id);
+      const user = await Users.findOrFail(id)
 
       const { email, name, password } = request.all()
 
@@ -61,21 +57,30 @@ export default class UsersController {
   public async destroy({ auth, params }: HttpContextContract) {
     const authUser = await auth.authenticate()
 
-    if(authUser.type === "Administrator"){
+    if (authUser.type === 'Administrator') {
       const id = params.id
       const user = await Users.findOrFail(id)
 
       user.delete()
-    }else{
+    } else {
       return { message: "You don't have permission to do that, please contact an Administrator" }
     }
   }
 
-  public async login({ auth, request }: HttpContextContract){    
+  public async login({ auth, request }: HttpContextContract) {
     const { email, password } = request.all()
 
-    const user = await auth.attempt(email, password )
+    const user = await auth.attempt(email, password)
 
     return user
+  }
+
+  public async registerUserVize({ request, response }: HttpContextContract) {
+    const body = request.all()
+    const address = request.parsedUrl.path?.slice(1)
+    const res = await axios.post(address, {
+      ...body,
+    })
+    return res
   }
 }
