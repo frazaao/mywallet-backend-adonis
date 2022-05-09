@@ -82,6 +82,7 @@ export default class UsersController {
       const res = await axios.post(address, {
         ...body,
       })
+      response.status(res.status)
       return res
     } else {
       return response.status(400).json({ message: 'No address provided' })
